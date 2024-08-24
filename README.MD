@@ -60,7 +60,7 @@ Here are some future enhancements and features that could be added to the game:
 - [ ] **Implement Multiplayer Features:** Allow multiple players to join the same game and interact or compete.
 - [ ] **Enhance Graphics and UI:** Upgrade the game’s visual presentation and user interface for a better experience.
 - [ ] **Optimize Code:** Refactor and optimize the existing codebase for better performance and maintainability.
-- [ ] **Bug Fixes and Stability Improvements:** Regularly test and fix bugs to ensure smooth gameplay.
+- [x] **Bug Fixes and Stability Improvements:** Regularly test and fix bugs to ensure smooth gameplay.
 
 ## Contributing
 Feel free to continue developing this video game! If you make improvements or add new features, please share your finished work with me. Step by step, we can turn it into something big, and maybe it will become a fully playable video game soon.
