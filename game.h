@@ -48,6 +48,7 @@ void displayAbout();
 void displayHelp();
 void addQuest(const char *description, int reward);
 void checkQuestCompletion();
+void interactWithCharacter();
 void mainMenu();
 void saveGame();
 void loadGame();

@@ -27,10 +27,14 @@ int days = 0;
 bool relationships = false;
 
 Character characters[] = {
-	{"Alice","Wife", 50},
-	{"Bob","Friend", 70},
-	{"Eve","Enemy", -50}
+	{"Alice", "Wife", 50},
+	{"Bob", "Friend", 70},
+	{"Eve", "Enemy", -50},
+	{"Charlie", "Mentor", 80},
+	{"Diana", "Girlfriend", 60},
+	{"Frank", "Rival", -30}
 };
+
 
 Quest quests[] = {
 	{"Defeat 5 enemies", 50, false},
@@ -179,7 +183,7 @@ void changeLocation() {
 	printf("Enter your choice: ");
 
 	askLocation = getchar();
-	getchar(); // Consume newline character
+	getchar(); 
 	switch (askLocation) {
 		case '1':
 			strcpy(location, "Village House");
@@ -227,20 +231,71 @@ void manageRelationships() {
 	waitForUser();
 }
 
+void interactWithCharacter() {
+    int choice;
+    printf("------ Interact with Characters ------\n");
+    for (int i = 0; i < characterCount; i++) {
+        printf("%d. %s (%s): Affection Level %d\n", i + 1, characters[i].name, characters[i].type, characters[i].affectionLevel);
+    }
+    printf("Choose a character to interact with (Enter the number): ");
+    scanf("%d", &choice);
+    getchar(); 
+
+    if (choice > 0 && choice <= characterCount) {
+        char interaction;
+        printf("Interacting with %s. Choose action: (F)ight, (T)alk, (G)ift: ", characters[choice - 1].name);
+        interaction = getchar();
+        getchar(); 
+
+        switch (toupper(interaction)) {
+            case 'F':
+                printf("You chose to fight with %s!\n", characters[choice - 1].name);
+                characters[choice - 1].affectionLevel -= 20;
+                printf("%s's affection level is now %d.\n", characters[choice - 1].name, characters[choice - 1].affectionLevel);
+                break;
+            case 'T':
+                printf("You have a friendly conversation with %s.\n", characters[choice - 1].name);
+                characters[choice - 1].affectionLevel += 10;
+                printf("%s's affection level is now %d.\n", characters[choice - 1].name, characters[choice - 1].affectionLevel);
+                break;
+            case 'G':
+                printf("You give a gift to %s.\n", characters[choice - 1].name);
+                characters[choice - 1].affectionLevel += 20;
+                printf("%s's affection level is now %d.\n", characters[choice - 1].name, characters[choice - 1].affectionLevel);
+                break;
+            default:
+                printf("Invalid action. Try again.\n");
+                break;
+        }
+    } else {
+        printf("Invalid choice. Returning to main menu.\n");
+    }
+
+    waitForUser();
+}
+
 void displayAbout() {
 	printf("--- About Blades and Swords RPG ---\n");
-	printf("This is a text-based RPG game where you explore different locations, fight enemies, complete, quest, and manage relationships.\n");
-	printf("More features will be added soon!\n");
-	printf("This videogame is Open Source, and we will be very happy if you will help us with development of her!\n");
+	printf("Blades and Swords RPG is a text-based adventure game set in a medieval fantasy world. You take on the role of a hero who explores different locations, completes quests, battles enemies, and manages relationships with various characters.\n");
+	printf("The game is set in a vast open world that includes diverse terrains such as mountains, lakes, villages, and more. Your decisions and actions will affect the story, relationships with other characters, and your hero's growth.\n");
+	printf("As you progress, you will face challenges, make choices that impact the narrative, and experience the consequences of your actions. Build your strength, forge alliances, and seek to become the most renowned hero in the realm.\n");
+	printf("More features and expansions are planned, including new locations, enemies, and story arcs.\n");
+	printf("This video game is Open Source, and we would be very happy if you help us with its development!\n");
 	waitForUser();
 }
 
 void displayHelp() {
 	printf("--- Help and Guide ---\n");
-	printf("1. Use the main menu to navigate through the game.\n");
-	printf("2. Earn coins by working and killing enemies.\n");
-	printf("3. Manage your health and relationships to survive.\n");
-	printf("4. Type the number of the menu option to select it.\n");
+	printf("1. Use the main menu to navigate through different sections of the game.\n");
+	printf("2. Earn coins by working in various locations or defeating enemies. Use coins to buy items or services like healing at the canteen.\n");
+	printf("3. Manage your hero's health carefully. Rest in safe places or use potions to recover lost HP.\n");
+	printf("4. Build relationships with different characters in the game. Your interactions can turn them into friends, allies, or enemies.\n");
+	printf("5. Complete quests to earn experience points (XP) and level up. Some quests have specific requirements or hidden rewards.\n");
+	printf("6. Type the corresponding number of the menu option to select it. Use 'Enter' to confirm your choice.\n");
+	printf("7. Always save your progress frequently to avoid losing your achievements.\n");
+	printf("8. Check your inventory regularly to manage items effectively and use them when needed.\n");
+	printf("9. Explore different locations to uncover secrets and new quests. Each location may have unique opportunities or dangers.\n");
+	printf("For more detailed information, refer to the game's user manual or the in-game tutorial.\n");
 	waitForUser();
 }
 
@@ -268,7 +323,13 @@ void checkQuestCompletion() {
 }
 
 void saveGame() {
-	FILE *file = fopen("savegame.dat", "wb");
+	char filename[100];
+	printf("Enter a name for your save file: ");
+	fgets(filename, sizeof(filename), stdin);
+	filename[strcspn(filename, "\n")] = 0; 
+
+	strcat(filename, ".dat");
+	FILE *file = fopen(filename, "wb");
 	if (!file) {
 		printf("Failed to save game.\n");
 		return;
@@ -291,14 +352,20 @@ void saveGame() {
 	fwrite(quests, sizeof(Quest), questCount, file);
 
 	fclose(file);
-	printf("Game saved successfully!\n");
+	printf("Game saved successfully as '%s'!\n", filename);
 	waitForUser();
 }
 
 void loadGame() {
-	FILE *file = fopen("savegame.dat", "rb");
+	char filename[100];
+	printf("Enter the name of the save file to load: ");
+	fgets(filename, sizeof(filename), stdin);
+	filename[strcspn(filename, "\n")] = 0; 
+
+	strcat(filename, ".dat");
+	FILE *file = fopen(filename, "rb");
 	if (!file) {
-		printf("Failed to load game.\n");
+		printf("Failed to load game. Check if the file exists.\n");
 		return;
 	}
 
@@ -319,7 +386,7 @@ void loadGame() {
 	fread(quests, sizeof(Quest), questCount, file);
 
 	fclose(file);
-	printf("Game loaded successfully!\n");
+	printf("Game loaded successfully from '%s'!\n", filename);
 	waitForUser();
 }
 
@@ -340,9 +407,6 @@ void newGame() {
 		mainMenu();
 }
 		
-
-
-
 void mainMenu() {
 
 
