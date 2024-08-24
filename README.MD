@@ -41,7 +41,7 @@ gcc -o blades_and_swords_rpg main.c
 ```
 3. **Run the game:**
 ```console
-./blades_of_swords_rpg
+./blades_and_swords_rpg
 ```
 ## Development Status
 This game is currently in an early stage of development and was created just for fun. It’s not the simplest RPG game that runs in a terminal, but it includes several features that make it unique and enjoyable.
