@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 #include "game.h"
 
 
@@ -189,6 +190,7 @@ void changeLocation() {
 			strcpy(location, "Village House");
 			printf("You decided to sleep and restore your HP.\n");
 			hp = 100;
+			days += 1;
 			break;
 		case '2':
 			strcpy(location, "Mountains");
@@ -404,6 +406,29 @@ void newGame() {
 		heroClass[strcspn(heroClass, "\n")] = 0; 
 		
 		clearScreen();
+
+
+		srand(time(0));
+		int random_number = (rand() % 3) + 1;
+		printf("TEST: %d\n", random_number);
+
+		if (random_number == 1) {
+			printf("Your character was born in a poor family, you don't have anything and have to start from zero.\n\n");
+		}
+
+		if (random_number == 2) {
+			printf("Your character was born in a decent family, so he has 5 coins in his pocket.\n\n");
+			balance += 5;
+		}
+
+		if (random_number == 3) {
+			printf("Your character was born in a very rich family, and he has 50 coins!\n\n");
+			balance += 50;
+		} else {
+			printf(" "); //It will print it every time, even if it's not else. Solve it pls someone
+		}
+
+		waitForUser();
 		mainMenu();
 }
 		
@@ -483,7 +508,7 @@ int main() {
 	clearScreen();
 
 	printf("1. Start New Game\n");
-	printf("(SOON) 2. Load Saved Game\n");
+	printf("2. Load Saved Game\n");
 	printf("Enter your choice: ");
 	newOrSave = getchar();
 	getchar();
