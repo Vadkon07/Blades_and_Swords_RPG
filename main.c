@@ -25,6 +25,7 @@ char heroName[20] = "NONE";
 char heroSurname[20] = "NONE";
 char heroClass[20] = "NONE";
 int days = 0;
+int enemiesKilled = 0;
 bool relationships = false;
 
 Character characters[] = {
@@ -39,6 +40,7 @@ Character characters[] = {
 
 Quest quests[] = {
 	{"Defeat 5 enemies", 50, false},
+	{"Defeat 10 enemies", 100, false},
 	{"Find a rare gem", 100, false}
 };
 
@@ -99,6 +101,7 @@ void heroInfo() {
 	printf("---> Current location: %s\n", location);
 	printf("---> Balance: %d coins\n", balance);
 	printf("---> Days survived: %d\n", days);
+	printf("---> Enemies killed: %d\n", enemiesKilled);
 	printf("---> Relationships: %s\n", relationships ? "Yes" : "No");
 	printf("---------------------------------\n\n");
 	waitForUser();
@@ -162,6 +165,8 @@ void killEnemies() {
 	xp += 10;
 
 	printf("You killed some enemies and earned %d coins, but took %d damage. +10 XP\n", coins, damage);
+
+	enemiesKilled +=1;
 
 	if (hp <= 0) {
 		printf("Your hero %s was killed. THE END.\n", heroName);
@@ -325,7 +330,12 @@ void addQuest(const char *description, int reward) {
 void checkQuestCompletion() {
 	for (int i = 0; i < questCount; i++) {
 		if (!quests[i].isCompleted) {
-			if (strcmp(quests[i].description, "Defeat 5 enemies") == 0 && xp >= 50) {
+			if (strcmp(quests[i].description, "Defeat 5 enemies") == 0 && enemiesKilled >= 5) {
+				quests[i].isCompleted = true;
+				balance += quests[i].reward;
+				printf("Quest completed: %s! You received %d coins.\n", quests[i].description, quests[i].reward);
+			}
+			if (strcmp(quests[i].description, "Defeat 10 enemies") == 0 && enemiesKilled >= 10) {
 				quests[i].isCompleted = true;
 				balance += quests[i].reward;
 				printf("Quest completed: %s! You received %d coins.\n", quests[i].description, quests[i].reward);
