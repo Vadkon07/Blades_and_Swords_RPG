@@ -32,9 +32,9 @@ Character characters[] = {
 
 
 Quest quests[] = {
-	{"Defeat 5 enemies", 50, false},
-	{"Defeat 10 enemies", 100, false},
-	{"Find a rare gem", 100, false}
+	{"Defeat 5 enemies", 10, 25, false},
+	{"Defeat 10 enemies", 20, 50, false},
+	{"Find a rare gem", 50, 100, false}
 };
 
 void theEnd() {
@@ -317,10 +317,11 @@ void displayHelp() {
 	waitForUser();
 }
 
-void addQuest(const char *description, int reward) {
+void addQuest(const char *description, int xp, int coins) {
 	if (questCount < 10) {
 		strcpy(quests[questCount].description, description);
-		quests[questCount].reward = reward;
+		quests[questCount].xp = xp;
+		quests[questCount].coins = coins;
 		quests[questCount].isCompleted = false;
 		questCount++;
 	} else {
@@ -333,13 +334,13 @@ void checkQuestCompletion() {
 		if (!quests[i].isCompleted) {
 			if (strcmp(quests[i].description, "Defeat 5 enemies") == 0 && enemiesKilled >= 5) {
 				quests[i].isCompleted = true;
-				balance += quests[i].reward;
-				printf("Quest completed: %s! You received %d coins.\n", quests[i].description, quests[i].reward);
+				balance += quests[i].coins;
+				printf("Quest completed: %s! You received %d xp and%d coins.\n", quests[i].description, quests[i].xp, quests[1].coins);
 			}
 			if (strcmp(quests[i].description, "Defeat 10 enemies") == 0 && enemiesKilled >= 10) {
 				quests[i].isCompleted = true;
-				balance += quests[i].reward;
-				printf("Quest completed: %s! You received %d coins.\n", quests[i].description, quests[i].reward);
+				balance += quests[i].coins;
+				printf("Quest completed: %s! You received %d coins.\n", quests[i].description, quests[i].coins);
 			}
 		}
 	}

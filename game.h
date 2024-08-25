@@ -13,7 +13,8 @@ typedef struct {
 
 typedef struct {
     char description[100];
-    int reward; // XP or coins
+    int xp;
+    int coins;
     bool isCompleted;
 } Quest;
 
@@ -46,7 +47,7 @@ void changeLocation();
 void manageRelationships();
 void displayAbout();
 void displayHelp();
-void addQuest(const char *description, int reward);
+void addQuest(const char *description, int xp, int coins);
 void checkQuestCompletion();
 void interactWithCharacter();
 void mainMenu();
