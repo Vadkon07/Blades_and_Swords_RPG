@@ -499,10 +499,17 @@ void newGame() {
 		waitForUser();
 		mainMenu();
 }
+
+void logo() {
+	printf("\n ___ _         _                       _   ___                   _    ");
+	printf("\n| _ ) |__ _ __| |___ ___  __ _ _ _  __| | / __|_ __ _____ _ _ __| |___");
+ 	printf("\n| _ \ / _` / _` / -_|_-< / _` | ' \/ _` | \__ \ V  V / _ \ '_/ _` (_-<)");
+ 	printf("\n|___/_\__,_\__,_\___/__/ \__,_|_||_\__,_| |___/\_/\_/\___/_| \__,_/__/\n\n");
+}
+                                                                      
+
 		
 void mainMenu() {
-
-
 	clearScreen();
 
 
@@ -576,6 +583,9 @@ void mainMenu() {
 
 int main() {
 	char newOrSave;
+
+	logo();
+	waitForUser();
 
 	clearScreen();
 
