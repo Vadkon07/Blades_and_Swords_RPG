@@ -64,6 +64,9 @@ Here are some future enhancements and features that could be added to the game:
 - [ ] **Optimise Quests:** Quests are for a little empty for now, we have to add them more.
 - [ ] **Solve Sleep In Village House:** He doesn't print "Zzz..."
 - [ ] **ASCII arts:** We can add 2D or 3D ASCII arts for locations and maybe something else.
+- [ ] **Clean:** In code we have 'manage relationships' and 'character relationships', and at all that's fully the same things which only use space in our code.
+1. Delete point number 5 from menu.
+2. Combine points number 5 and 6 only in point number 5.
 - [x] **Bug Fixes and Stability Improvements:** Regularly test and fix bugs to ensure smooth gameplay.
 
 ## Contributing
