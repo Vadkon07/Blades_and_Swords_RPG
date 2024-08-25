@@ -430,11 +430,12 @@ void newGame() {
 		printf("1. Human\n");
 		printf("2. Orc\n");
 		printf("3. Elf\n");
+		printf("4. Alchemist\n");
 		printf("Enter your choice: ");
 		scanf("%d", &chooseClass);
 
 		if (chooseClass == 1) {
-			strcpy(heroClass, "Human");
+			strcpy(heroClass, "Knight");
 		}
 
 		if (chooseClass == 2) {
@@ -443,6 +444,10 @@ void newGame() {
 
 		if (chooseClass == 3) {
 			strcpy(heroClass, "Elf");
+		}
+
+		if (chooseClass == 4) {
+			strcpy(heroClass, "Alchemist");
 		}
 
 		if (chooseClass == 666) {
