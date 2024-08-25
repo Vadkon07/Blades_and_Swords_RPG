@@ -269,14 +269,14 @@ void interactWithCharacter() {
             case 'G':
 		int askAboutGift;
 
-		printf("Gift costs 20 coins, are you sure? (y/n)");
+		printf("Gift costs 20 coins, are you sure? (Y/N)");
 
 		askAboutGift = getchar();
 		getchar();
 
-		switch (askAboutGift) {
+		switch (toupper(askAboutGift)) {
 
-			case 'y':
+			case 'Y':
 				printf("You give a gift to %s.\n", characters[choice - 1].name);
 				printf("%s: Oh, thank you so much for this gift!\n", characters[choice - 1].name);
 				characters[choice - 1].affectionLevel += 20;
@@ -285,7 +285,7 @@ void interactWithCharacter() {
 				break;
 
 
-			case 'n':
+			case 'N':
 				printf("No gifts today");
 			default:
 				printf("You decided not to gift anything to %s.", characters[choice - 1].name);
