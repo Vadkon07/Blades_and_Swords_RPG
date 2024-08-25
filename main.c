@@ -334,11 +334,13 @@ void checkQuestCompletion() {
 		if (!quests[i].isCompleted) {
 			if (strcmp(quests[i].description, "Defeat 5 enemies") == 0 && enemiesKilled >= 5) {
 				quests[i].isCompleted = true;
+				xp += quests[i].xp;
 				balance += quests[i].coins;
-				printf("Quest completed: %s! You received %d xp and%d coins.\n", quests[i].description, quests[i].xp, quests[1].coins);
+				printf("Quest completed: %s! You received %d xp and %d coins.\n", quests[i].description, quests[i].xp, quests[1].coins);
 			}
 			if (strcmp(quests[i].description, "Defeat 10 enemies") == 0 && enemiesKilled >= 10) {
 				quests[i].isCompleted = true;
+				xp += quests[i].xp;					
 				balance += quests[i].coins;
 				printf("Quest completed: %s! You received %d coins.\n", quests[i].description, quests[i].coins);
 			}
