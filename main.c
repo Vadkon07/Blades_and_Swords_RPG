@@ -424,12 +424,28 @@ void newGame() {
 
 		printf("Choose the class of your hero:\n");
 		printf("1. Human\n");
+		printf("2. Orc\n");
+		printf("3. Elf\n");
 		printf("Enter your choice: ");
 		scanf("%d", &chooseClass);
 
 		if (chooseClass == 1) {
 			strcpy(heroClass, "Human");
 		}
+
+		if (chooseClass == 2) {
+			strcpy(heroClass, "Orc");
+		}
+
+		if (chooseClass == 3) {
+			strcpy(heroClass, "Elf");
+		}
+
+		if (chooseClass == 666) {
+			strcpy(heroClass, "Devil"); //Easter egg ;)
+		}
+
+
 
 		else {
 			printf("Error");
