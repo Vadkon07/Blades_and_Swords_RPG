@@ -413,6 +413,7 @@ void loadGame() {
 }
 
 void newGame() {
+		int chooseClass;
 		printf("Enter the name of your hero: ");
 		fgets(heroName, sizeof(heroName), stdin);
 		heroName[strcspn(heroName, "\n")] = 0; 
@@ -421,9 +422,18 @@ void newGame() {
 		fgets(heroSurname, sizeof(heroSurname), stdin);
 		heroSurname[strcspn(heroSurname, "\n")] = 0; 
 
-		printf("Enter the class of your hero: ");
-		fgets(heroClass, sizeof(heroClass), stdin);
-		heroClass[strcspn(heroClass, "\n")] = 0; 
+		printf("Choose the class of your hero:\n");
+		printf("1. Human\n");
+		printf("Enter your choice: ");
+		scanf("%d", &chooseClass);
+
+		if (chooseClass == 1) {
+			strcpy(heroClass, "Human");
+		}
+
+		else {
+			printf("Error");
+		}
 		
 		clearScreen();
 
