@@ -60,6 +60,10 @@ Here are some future enhancements and features that could be added to the game:
 - [ ] **Implement Multiplayer Features:** Allow multiple players to join the same game and interact or compete.
 - [ ] **Enhance Graphics and UI:** Upgrade the game’s visual presentation and user interface for a better experience.
 - [ ] **Optimize Code:** Refactor and optimize the existing codebase for better performance and maintainability.
+- [ ] **Bigger Team:** For this project we have only 2 developers, and it will be nice if we will find more people for our team. With 3-4 people in team we can significantly boost our process of development.
+- [ ] **Optimise Quests:** Quests are for a little empty for now, we have to add them more.
+- [ ] **Solve Sleep In Village House:** He doesn't print "Zzz..."
+- [ ] **ASCII arts:** We can add 2D or 3D ASCII arts for locations and maybe something else.
 - [x] **Bug Fixes and Stability Improvements:** Regularly test and fix bugs to ensure smooth gameplay.
 
 ## Contributing
