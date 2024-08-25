@@ -245,7 +245,7 @@ void interactWithCharacter() {
 
     if (choice > 0 && choice <= characterCount) {
         char interaction;
-        printf("Interacting with %s. Choose action: (F)ight, (T)alk, (G)ift: ", characters[choice - 1].name);
+        printf("Interacting with %s. Choose action: (F)ight, (T)alk, (G)ift (SOON): ", characters[choice - 1].name);
         interaction = getchar();
         getchar(); 
 
@@ -261,6 +261,13 @@ void interactWithCharacter() {
                 printf("%s's affection level is now %d.\n", characters[choice - 1].name, characters[choice - 1].affectionLevel);
                 break;
             case 'G':
+		int askAboutGift;
+
+		printf("Gift costs 20 coins, are you sure? (y/n)");
+
+		askAboutGift = getchar();
+		getchar();
+
                 printf("You give a gift to %s.\n", characters[choice - 1].name);
                 characters[choice - 1].affectionLevel += 20;
                 printf("%s's affection level is now %d.\n", characters[choice - 1].name, characters[choice - 1].affectionLevel);
@@ -409,8 +416,8 @@ void newGame() {
 
 
 		srand(time(0));
-		int random_number = (rand() % 3) + 1;
-		printf("TEST: %d\n", random_number);
+		int random_number = (rand() % 5) + 1;
+		//printf("TEST: %d\n", random_number); //for debugm and will be deleted soon, but before we have to add +-10 different stories
 
 		if (random_number == 1) {
 			printf("Your character was born in a poor family, you don't have anything and have to start from zero.\n\n");
@@ -424,6 +431,19 @@ void newGame() {
 		if (random_number == 3) {
 			printf("Your character was born in a very rich family, and he has 50 coins!\n\n");
 			balance += 50;
+		}
+
+		if (random_number == 4) {
+			printf("Your character was born in Mountains!\n\n");
+			strcpy(location, "Mountains");
+			printf("You are now in the Mountains. Watch out for enemies!\n");
+		}
+
+		if (random_number == 5) {
+			printf("Your charecter was for a little sick some time ago, so for now he has only 20 hp!\n\n");
+			hp = 20;
+
+
 		} else {
 			printf(" "); //It will print it every time, even if it's not else. Solve it pls someone
 		}
@@ -451,11 +471,12 @@ void mainMenu() {
 	printf("--- Welcome to the Blades and Swords RPG! ---\n\n");
 	printf("1. Hero info\n");
 	printf("2. Inventory\n");
-	printf("3. Work\n");
+	printf("3. Kill enemies\n");
 	printf("4. Change location\n");
-	printf("5. Manage Relationships\n");
-	printf("6. Save Game\n");
-	printf("7. Load Game\n");
+	printf("5. Manage relationships\n");
+	printf("6. Interact with characters\n");
+	printf("7. Save Game\n");
+	printf("8. Load Game\n");
 	printf("9. About RPG\n");
 	printf("H. Help\n");
 	printf("0. Exit\n\n");
@@ -480,9 +501,12 @@ void mainMenu() {
 			manageRelationships();
 			break;
 		case '6':
-			saveGame();
+			interactWithCharacter();
 			break;
 		case '7':
+			saveGame();
+			break;
+		case '8':
 			loadGame();
 			break;
 		case '9':
@@ -524,4 +548,3 @@ int main() {
 			printf("Invalid choice, try again. Please, check that you actually have a saved games. If not - instead start a new game\n");
 	}
 }
-
