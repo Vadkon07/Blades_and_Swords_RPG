@@ -44,9 +44,9 @@ gcc -o blades_and_swords_rpg main.c
 ./blades_and_swords_rpg
 ```
 ## Development Status
-This game is currently in an early stage of development and was created just for fun. It’s not the simplest RPG game that runs in a terminal, but it includes several features that make it unique and enjoyable.
+This game is currently in an early stage of development and was created just for fun, but for now we noticed that this game can be turned into something bigger pretty easy. Our main idea - full RPG video game, but only in terminal.
 
-Although I have paused development for now, this project can be a valuable learning resource. You’ll find many important lines of code that can help improve your coding skills.
+For now we are looking for more developers which are ready to help us with development. With a big community we can easily build the biggest terminal-based video game in the world. Just imagine: 100 people develope video game together every day, what this video game will looks like even just one month later?
 
 ## To-Do List
 Here are some future enhancements and features that could be added to the game:
