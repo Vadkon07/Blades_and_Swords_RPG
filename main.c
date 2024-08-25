@@ -274,13 +274,23 @@ void interactWithCharacter() {
 		askAboutGift = getchar();
 		getchar();
 
-                printf("You give a gift to %s.\n", characters[choice - 1].name);
-		printf("%s: Oh, thank you so much for this gift!\n", characters[choice - 1].name);
-                characters[choice - 1].affectionLevel += 20;
-                printf("%s's affection level is now %d.\n", characters[choice - 1].name, characters[choice - 1].affectionLevel);
+		switch (askAboutGift) {
 
-		balance -= 20;
-                break;
+			case 'y':
+				printf("You give a gift to %s.\n", characters[choice - 1].name);
+				printf("%s: Oh, thank you so much for this gift!\n", characters[choice - 1].name);
+				characters[choice - 1].affectionLevel += 20;
+				printf("%s's affection level is now %d.\n", characters[choice - 1].name, characters[choice - 1].affectionLevel);
+				balance -= 20;
+				break;
+
+
+			case 'n':
+				printf("No gifts today");
+			default:
+				printf("You decided not to gift anything to %s.", characters[choice - 1].name);
+	}
+
             default:
                 printf("Invalid action. Try again.\n");
                 break;
