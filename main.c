@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 #include "game.h"
 
 
@@ -194,6 +195,14 @@ void changeLocation() {
 		case '1':
 			strcpy(location, "Village House");
 			printf("You decided to sleep and restore your HP.\n");
+			sleep(1);
+			printf("Z...");
+			sleep(1);
+			printf("Zz...");
+			sleep(1);
+			printf("Zzz...");
+			sleep(2);
+
 			hp = 100;
 			days += 1;
 			break;
