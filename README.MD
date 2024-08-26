@@ -62,7 +62,7 @@ Here are some future enhancements and features that could be added to the game:
 - [ ] **Optimize Code:** Refactor and optimize the existing codebase for better performance and maintainability.
 - [ ] **Bigger Team:** For this project we have only 2 developers, and it will be nice if we will find more people for our team. With 3-4 people in team we can significantly boost our process of development.
 - [ ] **Optimise Quests:** Quests are for a little empty for now, we have to add them more.
-- [ ] **Solve Sleep In Village House:** He doesn't print "Zzz..."
+- [X] **Solve Sleep In Village House:** He doesn't print "Zzz...". 
 - [ ] **ASCII arts:** We can add 2D or 3D ASCII arts for locations and maybe something else.
 - [ ] **Clean:** In code we have 'manage relationships' and 'character relationships', and at all that's fully the same things which only use space in our code.
 1. Delete point number 5 from menu.

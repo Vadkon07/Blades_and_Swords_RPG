@@ -170,6 +170,14 @@ void killEnemies() {
 	waitForUser();
 }
 
+void printWithAnimation(const char* text) {
+	for (int i = 0; text[i] != '\0'; i++) {
+		printf("%c", text[i]);
+		fflush(stdout); 
+		usleep(100000); 
+	}
+}
+
 void changeLocation() {
 	int askLocation;
 	printf("Where would you like to go (current location is (%s))?\n", location);
@@ -186,14 +194,10 @@ void changeLocation() {
 	switch (askLocation) {
 		case '1':
 			strcpy(location, "Village House");
-			printf("You decided to sleep and restore your HP.\n");
-			sleep(1);
-			printf("Z...");
-			sleep(1);
-			printf("Zz...");
-			sleep(1);
-			printf("Zzz...");
-			sleep(2);
+            printf("You decided to sleep and restore your HP.\n");
+
+			char sleepAnimation[] = "Z . . .\nZz . . .\nZzz . . .\n";
+			printWithAnimation(sleepAnimation);
 
 			hp = 100;
 			days += 1;
