@@ -437,7 +437,7 @@ void newGame() {
 		heroSurname[strcspn(heroSurname, "\n")] = 0; 
 
 		printf("Choose the class of your hero:\n");
-		printf("1. Human\n");
+		printf("1. Knight\n");
 		printf("2. Orc\n");
 		printf("3. Elf\n");
 		printf("4. Alchemist\n");
