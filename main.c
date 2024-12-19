@@ -135,7 +135,6 @@ if (hp < 0) { snprintf(message + strlen(message), sizeof(message) - strlen(messa
 void heroInventory() {
 	printf("------ Your Inventory ------\n");
 	listInventory();
-	waitForUser();
 }
 
 void addItemToInventory(const char *name, const char *type, int value) {
@@ -318,12 +317,21 @@ void changeLocation() {
 	waitForUser();
 }
 
-void manageRelationships() {
-	printf("------ Character Relationships ------\n");
-	for (int i = 0; i < characterCount; i++) {
-		printf("%s (%s): Affection Level %d\n", characters[i].name, characters[i].type, characters[i].affectionLevel);
-	}
-	waitForUser();
+void manageRelationships(gpointer data, gpointer message_area) {
+    GtkTextView *text_view = GTK_TEXT_VIEW(data);
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(message_area));
+    gtk_text_buffer_set_text(buffer, "", -1);
+
+    char message[4096];
+    snprintf(message, sizeof(message), "------ Character Relationships ------\n");
+    
+    for (int i = 0; i < characterCount; i++) {
+        char temp[256];
+        snprintf(temp, sizeof(temp), "%s (%s): Affection Level %d\n", characters[i].name, characters[i].type, characters[i].affectionLevel);
+        strncat(message, temp, sizeof(message) - strlen(message) - 1);
+    }
+
+    gtk_text_buffer_set_text(buffer, message, -1);
 }
 
 void interactWithCharacter() {
@@ -390,7 +398,7 @@ void interactWithCharacter() {
 }
 
 void displayAbout() {
-	printf("--- About Blades and Swords RPG ---\n");
+	printf("--- About Moonshadow RPG ---\n");
 	printf("Blades and Swords RPG is a text-based adventure game set in a medieval fantasy world. You take on the role of a hero who explores different locations, completes quests, battles enemies, and manages relationships with various characters.\n");
 	printf("The game is set in a vast open world that includes diverse terrains such as mountains, lakes, villages, and more. Your decisions and actions will affect the story, relationships with other characters, and your hero's growth.\n");
 	printf("As you progress, you will face challenges, make choices that impact the narrative, and experience the consequences of your actions. Build your strength, forge alliances, and seek to become the most renowned hero in the realm.\n");
@@ -399,19 +407,26 @@ void displayAbout() {
 	waitForUser();
 }
 
-void displayHelp() {
-	printf("--- Help and Guide ---\n");
-	printf("1. Use the main menu to navigate through different sections of the game.\n");
-	printf("2. Earn coins by working in various locations or defeating enemies. Use coins to buy items or services like healing at the canteen.\n");
-	printf("3. Manage your hero's health carefully. Rest in safe places or use potions to recover lost HP.\n");
-	printf("4. Build relationships with different characters in the game. Your interactions can turn them into friends, allies, or enemies.\n");
-	printf("5. Complete quests to earn experience points (XP) and level up. Some quests have specific requirements or hidden rewards.\n");
-	printf("6. Type the corresponding number of the menu option to select it. Use 'Enter' to confirm your choice.\n");
-	printf("7. Always save your progress frequently to avoid losing your achievements.\n");
-	printf("8. Check your inventory regularly to manage items effectively and use them when needed.\n");
-	printf("9. Explore different locations to uncover secrets and new quests. Each location may have unique opportunities or dangers.\n");
-	printf("For more detailed information, refer to the game's user manual or the in-game tutorial.\n");
-	waitForUser();
+void displayHelp(gpointer data, gpointer message_area) {
+	GtkTextView *text_view = GTK_TEXT_VIEW(data);
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(message_area));
+	gtk_text_buffer_set_text(buffer, "", -1);
+
+	char message[4096];
+
+	snprintf(message, sizeof(message),
+			"--- Help and Guide ---\n"
+			"1. Use the main menu to navigate through different sections of the game.\n"
+			"2. Earn coins by working in various locations or defeating enemies. Use coins to buy items or services like healing at the canteen.\n"
+			"3. Manage your hero's health carefully. Rest in safe places or use potions to recover lost HP.\n"
+			"4. Build relationships with different characters in the game. Your interactions can turn them into friends, allies, or enemies.\n"
+			"5. Complete quests to earn experience points (XP) and level up. Some quests have specific requirements or hidden rewards.\n"
+			"6. Type the corresponding number of the menu option to select it. Use 'Enter' to confirm your choice.\n"
+			"7. Always save your progress frequently to avoid losing your achievements.\n"
+			"8. Check your inventory regularly to manage items effectively and use them when needed.\n"
+			"9. Explore different locations to uncover secrets and new quests. Each location may have unique opportunities or dangers.\n"
+			"For more detailed information, refer to the game's user manual or the in-game tutorial.\n");
+	gtk_text_buffer_insert_at_cursor(buffer, message, -1);
 }
 
 void addQuest(const char *description, int xp, int coins) {
@@ -559,8 +574,6 @@ void on_new_game_confirm(GtkWidget *widget, gpointer data) {
         default: g_print("Error, choose a hero class!\n"); return;
     }
 
-    clearScreen();
-
     srand(time(0));
     int random_number = (rand() % 10) + 1;
 
@@ -600,7 +613,6 @@ void on_new_game_confirm(GtkWidget *widget, gpointer data) {
 
     gtk_text_buffer_insert_at_cursor(buffer, story, -1);
 
-    waitForUser();
     mainMenu(widget);
 }
 
@@ -685,7 +697,7 @@ void mainMenu(GtkWidget *widget) {
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "Moonshadow");
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
-    gtk_window_set_default_size(GTK_WINDOW(window), 300, 400);
+    gtk_window_set_default_size(GTK_WINDOW(window), 640, 480);
 
     grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(window), grid);
@@ -709,19 +721,19 @@ void mainMenu(GtkWidget *widget) {
     gtk_grid_attach(GTK_GRID(grid), change_location_button, 0, 3, 1, 1);
     // g_signal_connect(change_location_button, "clicked", G_CALLBACK(changeLocation), NULL);
 
-    manage_relationships_button = gtk_button_new_with_label("Manage relationships (NO)");
+    manage_relationships_button = gtk_button_new_with_label("Manage relationships");
     gtk_grid_attach(GTK_GRID(grid), manage_relationships_button, 0, 4, 1, 1);
-    // g_signal_connect(manage_relationships_button, "clicked", G_CALLBACK(manageRelationships), NULL);
+    g_signal_connect(manage_relationships_button, "clicked", G_CALLBACK(manageRelationships), message_area);
 
     interact_characters_button = gtk_button_new_with_label("Interact with characters (NO)");
     gtk_grid_attach(GTK_GRID(grid), interact_characters_button, 0, 5, 1, 1);
     // g_signal_connect(interact_characters_button, "clicked", G_CALLBACK(interactWithCharacter), NULL);
 
-    save_game_button = gtk_button_new_with_label("Save Game (NO)");
+    save_game_button = gtk_button_new_with_label("Save Game");
     gtk_grid_attach(GTK_GRID(grid), save_game_button, 0, 6, 1, 1);
     g_signal_connect(save_game_button, "clicked", G_CALLBACK(saveGame), NULL);
 
-    load_game_button = gtk_button_new_with_label("Load Game (NO)");
+    load_game_button = gtk_button_new_with_label("Load Game");
     gtk_grid_attach(GTK_GRID(grid), load_game_button, 0, 7, 1, 1);
     g_signal_connect(load_game_button, "clicked", G_CALLBACK(loadGame), NULL);
 
@@ -729,9 +741,9 @@ void mainMenu(GtkWidget *widget) {
     gtk_grid_attach(GTK_GRID(grid), about_rpg_button, 0, 8, 1, 1);
     // g_signal_connect(about_rpg_button, "clicked", G_CALLBACK(displayAbout), NULL);
 
-    help_button = gtk_button_new_with_label("Help (NO)");
+    help_button = gtk_button_new_with_label("Help");
     gtk_grid_attach(GTK_GRID(grid), help_button, 0, 9, 1, 1);
-    // g_signal_connect(help_button, "clicked", G_CALLBACK(displayHelp), NULL);
+    g_signal_connect(help_button, "clicked", G_CALLBACK(displayHelp), message_area);
 
     exit_button = gtk_button_new_with_label("Exit");
     gtk_grid_attach(GTK_GRID(grid), exit_button, 0, 10, 1, 1);
