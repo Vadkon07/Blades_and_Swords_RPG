@@ -26,7 +26,7 @@ void waitForUser();
 void show_main_menu();
 void heroInfo();
 void heroInventory();
-
+void close_window();
 
 GtkWidget *grid;
 
@@ -104,21 +104,32 @@ void increaseHp(int amount) {
 	}
 }
 
-void heroInfo() {
-	printf("----------+ HERO INFO +----------\n\n");
-	printf("---> Name: %s\n", heroName);
-	printf("---> Surname: %s\n", heroSurname);
-	printf("---> Class: %s\n", heroClass);
-	printf("---> HP: %d\n", hp);
-	printf("---> LVL: %d\n", lvl);
-	printf("---> XP: %d / %d\n", xp, reqXp);
-	printf("---> Current location: %s\n", location);
-	printf("---> Balance: %d coins\n", balance);
-	printf("---> Days survived: %d\n", days);
-	printf("---> Enemies killed: %d\n", enemiesKilled);
-	printf("---> Relationships: %s\n", relationships ? "Yes" : "No");
-	printf("---------------------------------\n\n");
-	waitForUser();
+void heroInfo(gpointer data, gpointer message_area) {
+    GtkTextView *text_view = GTK_TEXT_VIEW(data);
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(message_area));
+    gtk_text_buffer_set_text(buffer, "", -1); // Clear previous text
+
+    char message[512];
+
+    snprintf(message, sizeof(message), 
+        "----------+ HERO INFO +----------\n\n"
+        "---> Name: %s\n"
+        "---> Surname: %s\n"
+        "---> Class: %s\n"
+        "---> HP: %d\n"
+        "---> LVL: %d\n"
+        "---> XP: %d / %d\n"
+        "---> Current location: %s\n"
+        "---> Balance: %d coins\n"
+        "---> Days survived: %d\n"
+        "---> Enemies killed: %d\n"
+        "---> Relationships: %s\n"
+        "---------------------------------\n\n",
+        heroName, heroSurname, heroClass, hp, lvl, xp, reqXp, location, balance, days, enemiesKilled, relationships ? "Yes" : "No");
+
+if (hp < 0) { snprintf(message + strlen(message), sizeof(message) - strlen(message), "Hero is died. You have to start a new game or load a save!\n"); }
+
+    gtk_text_buffer_insert_at_cursor(buffer, message, -1);
 }
 
 void heroInventory() {
@@ -241,7 +252,6 @@ void killEnemies(GtkWidget *widget, gpointer message_area) {
         }
     }
 }
-
 
 void printWithAnimation(const char* text) {
     for (int i = 0; text[i] != '\0'; i++) {
@@ -542,8 +552,11 @@ void on_new_game_confirm(GtkWidget *widget, gpointer data) {
         case 2: strcpy(heroClass, "Orc"); break;
         case 3: strcpy(heroClass, "Elf"); break;
         case 4: strcpy(heroClass, "Alchemist"); break;
-        case 666: strcpy(heroClass, "Devil"); break; // Easter egg
-        default: g_print("Error\n"); return;
+	case 5: strcpy(heroClass, "Samurai"); break;
+	case 6: strcpy(heroClass, "Monk"); break;
+	case 7: strcpy(heroClass, "Hunter"); break;
+	case 8: strcpy(heroClass, "Warrior"); break;
+        default: g_print("Error, choose a hero class!\n"); return;
     }
 
     clearScreen();
@@ -617,10 +630,16 @@ void newGame(GtkWidget *widget, gpointer data) {
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_class), "Orc");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_class), "Elf");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_class), "Alchemist");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_class), "Samurai");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_class), "Monk");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_class), "Hunter");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_class), "Warrior");
+
     gtk_grid_attach(GTK_GRID(grid), combo_class, 1, 2, 1, 1);
 
     confirm_button = gtk_button_new_with_label("Confirm");
     g_signal_connect(confirm_button, "clicked", G_CALLBACK(on_new_game_confirm), dialog);
+    g_signal_connect(confirm_button, "clicked", G_CALLBACK(close_window), dialog);
     gtk_grid_attach(GTK_GRID(grid), confirm_button, 1, 3, 1, 1);
 
     gtk_widget_show_all(dialog);
@@ -672,13 +691,13 @@ void mainMenu(GtkWidget *widget) {
     gtk_container_add(GTK_CONTAINER(window), grid);
 
     message_area = gtk_text_view_new();
-    gtk_grid_attach(GTK_GRID(grid), message_area, 0, 11, 1, 5);
+    gtk_grid_attach(GTK_GRID(grid), message_area, 2, 0, 1, 12);
 
     hero_info_button = gtk_button_new_with_label("Hero info");
     gtk_grid_attach(GTK_GRID(grid), hero_info_button, 0, 0, 1, 1);
-    // g_signal_connect(hero_info_button, "clicked", G_CALLBACK(heroInfo), NULL);
+    g_signal_connect(hero_info_button, "clicked", G_CALLBACK(heroInfo), message_area);
 
-    inventory_button = gtk_button_new_with_label("Inventory");
+    inventory_button = gtk_button_new_with_label("Inventory (NO)");
     gtk_grid_attach(GTK_GRID(grid), inventory_button, 0, 1, 1, 1);
     // g_signal_connect(inventory_button, "clicked", G_CALLBACK(heroInventory), NULL);
 
@@ -686,31 +705,31 @@ void mainMenu(GtkWidget *widget) {
     gtk_grid_attach(GTK_GRID(grid), kill_enemies_button, 0, 2, 1, 1);
     g_signal_connect(kill_enemies_button, "clicked", G_CALLBACK(killEnemies), message_area);
 
-    change_location_button = gtk_button_new_with_label("Change location");
+    change_location_button = gtk_button_new_with_label("Change location (NO)");
     gtk_grid_attach(GTK_GRID(grid), change_location_button, 0, 3, 1, 1);
     // g_signal_connect(change_location_button, "clicked", G_CALLBACK(changeLocation), NULL);
 
-    manage_relationships_button = gtk_button_new_with_label("Manage relationships");
+    manage_relationships_button = gtk_button_new_with_label("Manage relationships (NO)");
     gtk_grid_attach(GTK_GRID(grid), manage_relationships_button, 0, 4, 1, 1);
     // g_signal_connect(manage_relationships_button, "clicked", G_CALLBACK(manageRelationships), NULL);
 
-    interact_characters_button = gtk_button_new_with_label("Interact with characters");
+    interact_characters_button = gtk_button_new_with_label("Interact with characters (NO)");
     gtk_grid_attach(GTK_GRID(grid), interact_characters_button, 0, 5, 1, 1);
     // g_signal_connect(interact_characters_button, "clicked", G_CALLBACK(interactWithCharacter), NULL);
 
-    save_game_button = gtk_button_new_with_label("Save Game");
+    save_game_button = gtk_button_new_with_label("Save Game (NO)");
     gtk_grid_attach(GTK_GRID(grid), save_game_button, 0, 6, 1, 1);
-    // g_signal_connect(save_game_button, "clicked", G_CALLBACK(saveGame), NULL);
+    g_signal_connect(save_game_button, "clicked", G_CALLBACK(saveGame), NULL);
 
-    load_game_button = gtk_button_new_with_label("Load Game");
+    load_game_button = gtk_button_new_with_label("Load Game (NO)");
     gtk_grid_attach(GTK_GRID(grid), load_game_button, 0, 7, 1, 1);
-    // g_signal_connect(load_game_button, "clicked", G_CALLBACK(loadGame), NULL);
+    g_signal_connect(load_game_button, "clicked", G_CALLBACK(loadGame), NULL);
 
-    about_rpg_button = gtk_button_new_with_label("About RPG");
+    about_rpg_button = gtk_button_new_with_label("About RPG (NO)");
     gtk_grid_attach(GTK_GRID(grid), about_rpg_button, 0, 8, 1, 1);
     // g_signal_connect(about_rpg_button, "clicked", G_CALLBACK(displayAbout), NULL);
 
-    help_button = gtk_button_new_with_label("Help");
+    help_button = gtk_button_new_with_label("Help (NO)");
     gtk_grid_attach(GTK_GRID(grid), help_button, 0, 9, 1, 1);
     // g_signal_connect(help_button, "clicked", G_CALLBACK(displayHelp), NULL);
 
@@ -731,6 +750,9 @@ void clear_window(GtkWidget *container) {
     g_list_free(children);
 }
 
+void close_window(GtkWidget *widget, gpointer window) {
+	gtk_widget_destroy(GTK_WIDGET(window));
+}
 
 void exit_application(GtkWidget *widget, gpointer data) {
 	gtk_main_quit(); 
@@ -765,14 +787,13 @@ int main(int argc, char *argv[]) {
 	g_signal_connect(new_game_button, "clicked", G_CALLBACK(newGame), NULL);
 	g_signal_connect(load_game_button, "clicked", G_CALLBACK(loadGame), NULL);
 	g_signal_connect(exit_button, "clicked", G_CALLBACK(exit_application), NULL);
+
+	//g_signal_connect(new_game_button, "clicked", G_CALLBACK(close_window), grid);
+	//g_signal_connect(load_game_button, "clicked", G_CALLBACK(close_window), grid);
 	 
 	gtk_widget_show_all(window);
 	
 	gtk_main();
 	
 	return 0;
-
-	clearScreen();
-
-	waitForUser();
 }
